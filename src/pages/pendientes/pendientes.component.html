@@ -6,34 +6,51 @@
 
 <ion-content padding>
 
-  <ion-card *ngFor="let lista of _listaDeseos.listas">
+  <ion-grid *ngIf="( _listaDeseos.listas | pendientes ).length === 0">
+    <ion-row>
+      <ion-col class="text-center caja-vacia">
+        <ion-icon class="icono-grande" ios="ios-information-circle" md="md-information-circle"></ion-icon>
+        <p>
+          No hay ninguna lista.
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-    <ion-item>
-      Button
+  <ion-card *ngFor="let lista of _listaDeseos.listas | pendientes; let i = index">
+
+    <ion-item (click)="verDetalle( lista, i)" >
+      <ion-title>{{ lista.nombre }}</ion-title>
+      <ion-note item-right>
+        {{ lista.items.length }} items
+      </ion-note>
     </ion-item>
+    <hr>
 
-    <ion-card-header>
-      {{ lista.nombre }}
-    </ion-card-header>
+    <ion-list *ngIf="!sliceDinamic">
 
-    <ion-list>
-
-      <ion-item>
-        <ion-icon name="arrow-dropright-circle"></ion-icon>
-        Tetris
+      <ion-item (click)="actualizar(lista, item)"
+      *ngFor="let item of lista.items | slice:0:2">
+        <ion-icon item-left *ngIf="!item.completado" ios="ios-square-outline" md="md-square-outline"></ion-icon>
+        <ion-icon item-left *ngIf="item.completado" ios="ios-checkbox-outline" md="md-checkbox-outline"></ion-icon>
+        <h2 [class.tachado]="item.completado">{{ item.nombre }}</h2>
       </ion-item>
 
-      <ion-item>
-        <ion-icon name="arrow-dropright-circle"></ion-icon>
-        Tetris
-      </ion-item>
+  </ion-list>
 
-      <ion-item>
-        <ion-icon name="arrow-dropright-circle"></ion-icon>
-        Tetris
-      </ion-item>
+  <ion-list *ngIf="sliceDinamic">
+    <ion-item (click)="actualizar(lista, item)"
+    *ngFor="let item of lista.items">
+      <ion-icon item-left *ngIf="!item.completado" ios="ios-square-outline" md="md-square-outline"></ion-icon>
+      <ion-icon item-left *ngIf="item.completado" ios="ios-checkbox-outline" md="md-checkbox-outline"></ion-icon>
+      <h2 [class.tachado]="item.completado">{{ item.nombre }}</h2>
+    </ion-item>
+  </ion-list>
 
-    </ion-list>
+    <ion-item (click)="showAll(lista, i)" *ngIf="lista.items.length > 2" class="text-center">
+      <ion-icon *ngIf="!sliceDinamic" ios="ios-arrow-dropdown-circle" md="md-arrow-dropdown-circle" color="primary"></ion-icon>
+      <ion-icon *ngIf="sliceDinamic" ios="ios-arrow-dropup-circle" md="md-arrow-dropup-circle" color="primary"></ion-icon>
+    </ion-item>
 
   </ion-card>
 

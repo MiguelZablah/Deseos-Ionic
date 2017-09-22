@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Lista } from "../../app/clases/listas";
+import { Lista } from "../../app/clases/index";
 
 @Injectable()
 export class ListaDeseosService {
@@ -8,16 +8,34 @@ export class ListaDeseosService {
 
   constructor() {
 
-    let lista1 = new Lista('Compras de supermercado');
-    let lista2 = new Lista('Juegos que deseos');
-    let lista3 = new Lista('Cosas de la universidad');
+    // let lista1 = new Lista('Compras de supermercado');
+    // let lista2 = new Lista('Juegos que deseos');
+    // let lista3 = new Lista('Cosas de la universidad');
+    //
+    // this.listas.push( lista1 );
+    // this.listas.push( lista2 );
+    // this.listas.push( lista3 );
+    this.cargarData();
+  }
 
-    this.listas.push( lista1 );
-    this.listas.push( lista2 );
-    this.listas.push( lista3 );
+  actualizarData(){
+    localStorage.setItem( "data", JSON.stringify(this.listas) );
+  }
 
-    console.log(" Service Working ");
+  cargarData(){
+    if( localStorage.getItem("data") ){
+      this.listas = JSON.parse(localStorage.getItem("data"));
+    }
+  }
 
+  agregarLista( lista:Lista ){
+    this.listas.push(lista);
+    this.actualizarData();
+  }
+
+  eliminarLista( idx:number ){
+    this.listas.splice(idx, 1);
+    this.actualizarData();
   }
 
 }

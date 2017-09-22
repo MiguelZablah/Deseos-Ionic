@@ -1,9 +1,56 @@
 <ion-header>
-  <ion-navbar>
-    <ion-title>Terminados</ion-title>
+  <ion-navbar color="primary">
+    <ion-title>Lista de Terminado</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <h1>Nada terminado</h1>
+
+  <ion-grid *ngIf="( _listaDeseos.listas | pendientes:true ).length === 0">
+    <ion-row>
+      <ion-col class="text-center caja-vacia">
+        <ion-icon class="icono-grande" ios="ios-information-circle" md="md-information-circle"></ion-icon>
+        <p>
+          No hay ninguna lista.
+        </p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-card *ngFor="let lista of _listaDeseos.listas | pendientes:true; let i = index">
+
+    <ion-item (click)="verDetalle( lista, i)" >
+      <ion-title>{{ lista.nombre }}</ion-title>
+      <ion-note item-right>
+        {{ lista.items.length }} items
+      </ion-note>
+    </ion-item>
+    <hr>
+
+    <ion-list *ngIf="!sliceDinamic">
+
+      <ion-item (click)="actualizar(lista, item)"
+      *ngFor="let item of lista.items | slice:0:2">
+        <ion-icon item-left *ngIf="!item.completado" ios="ios-square-outline" md="md-square-outline"></ion-icon>
+        <ion-icon item-left *ngIf="item.completado" ios="ios-checkbox-outline" md="md-checkbox-outline"></ion-icon>
+        <h2 [class.tachado]="item.completado">{{ item.nombre }}</h2>
+      </ion-item>
+
+  </ion-list>
+
+  <ion-list *ngIf="sliceDinamic">
+    <ion-item (click)="actualizar(lista, item)"
+    *ngFor="let item of lista.items">
+      <ion-icon item-left *ngIf="!item.completado" ios="ios-square-outline" md="md-square-outline"></ion-icon>
+      <ion-icon item-left *ngIf="item.completado" ios="ios-checkbox-outline" md="md-checkbox-outline"></ion-icon>
+      <h2 [class.tachado]="item.completado">{{ item.nombre }}</h2>
+    </ion-item>
+  </ion-list>
+
+    <ion-item (click)="showAll()" *ngIf="lista.items.length > 2" class="text-center">
+      <ion-icon ios="ios-arrow-dropdown-circle" md="md-arrow-dropdown-circle" color="primary"></ion-icon>
+    </ion-item>
+
+  </ion-card>
+
 </ion-content>

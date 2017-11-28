@@ -44,12 +44,5 @@ export class PendientesComponent implements OnInit {
   }
 
   //Corregir para que solo se expanda la lista que escojio
-  showAll(listas, i){
-    let list:any;
-    if(this.sliceDinamic){
-      return this.sliceDinamic = false;
-    }
-    return this.sliceDinamic = true;
-  }
 
 }
